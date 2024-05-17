@@ -13,12 +13,12 @@ Klecks can either run in standalone mode (e.g. on [kleki.com](https://kleki.com)
 For a demo and list of features visit [kleki.com/home](https://kleki.com/home/). For future plans check here: [kleki.com/about](https://kleki.com/about/).
 
 # Commands
-- initialize via `npm install` (requires node and npm to be installed already)
-- `npm run lang:build` - generate language files necessary to run Klecks
-- `npm run start` - dev server (to run it locally)
-- `npm run build` - build standalone into `/dist/`
-- `npm run build:embed` - build of embed into `/dist/`
-- `npm run build:help` - build help page (when clicking the questionmark) into `/dist/`
+- initialize via `yarn install` (requires node and yarn to be installed already)
+- `yarn run lang:build` - generate language files necessary to run Klecks
+- `yarn run start` - dev server (to run it locally)
+- `yarn run build` - build standalone into `/dist/`
+- `yarn run build:embed` - build of embed into `/dist/`
+- `yarn run build:help` - build help page (when clicking the questionmark) into `/dist/`
 
 # Embed
 Example usage of the embed can be found under: `/examples/embed/`
@@ -67,13 +67,13 @@ Within such a file everything except `value` is to be kept in sync with `_base-e
 ```
 
 ### Creating/editing a translation
-To **create a new translation** run `npm run lang:add <code>`, which creates `src/languages/<code>.json5`. You find all
+To **create a new translation** run `yarn run lang:add <code>`, which creates `src/languages/<code>.json5`. You find all
 (ISO 639-1) language codes in `src/languages/languages.json`. The generated file will already include everything except `value`.
 To **edit an existing translation**, simply edit one of the files in `src/languages`. If a language file is out of sync with
 `src/languages/_base-en.json5` (English), whatever key is out of sync will be ignored and fall back on English. English is the
 source of truth. A translation cannot add new keys without them also being present in `_base-en.json5`.
 
-To **see your changes** in Klecks, run `npm run lang:build`. It needs to be run whenever changes to `src/languages` are
+To **see your changes** in Klecks, run `yarn run lang:build`. It needs to be run whenever changes to `src/languages` are
 made or it won't be up-to-date. Then build or start Klecks.
 
 A translation should try not to cause additional line-breaks in the UI if possible. Test to make sure translations
@@ -81,10 +81,10 @@ fit the context of the application. Note, some texts are only visible in the sta
 the embed-version.
 
 ### List of commands
-- `npm run lang:add <code>` - creates new language file `src/languages/<code>.json5`.
+- `yarn run lang:add <code>` - creates new language file `src/languages/<code>.json5`.
   - See (ISO 639-1) language codes in `src/languages/languages.json`
-- `npm run lang:sync <code>` - synchronizes with base file. (TODO)
-- `npm run lang:build` - generates JSON & TS files in `src/app/languages`
+- `yarn run lang:sync <code>` - synchronizes with base file. (TODO)
+- `yarn run lang:build` - generates JSON & TS files in `src/app/languages`
   - Problems are printed to the command line output
 
 # Contribute

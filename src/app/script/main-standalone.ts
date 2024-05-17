@@ -11,6 +11,12 @@ import {ProjectStore} from './klecks/storage/project-store';
 import {initLANG, LANG} from './language/language';
 import '../script/theme/theme';
 
+declare global {
+    interface Window {
+        klecks: KlApp;
+    }
+}
+
 function initError (e: Error): void {
     const el = document.createElement('div');
     el.style.textAlign = 'center';
@@ -72,6 +78,7 @@ function initError (e: Error): void {
         }
 
         document.body.append(klApp.getEl());
+        window.klecks = klApp;
     }
 
     async function onDomLoaded () {

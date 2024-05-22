@@ -60,6 +60,7 @@ body, html {
 .g-root { /* some browsers like to overwrite body */
     font-size: 16px;
     font-family: system-ui, sans-serif;
+    z-index: 500;
 }
 
 a:link, a:not([href]) {
@@ -176,7 +177,7 @@ a:hover, a:not([href]):hover {
 
 .kl-color-picker--active {
     box-shadow: 0 0 0 1px #fff;
-    z-index: 1;
+    z-index: 501;
 }
 
 .kl-color-picker__secondary {
@@ -450,7 +451,7 @@ button img {
     left: 0;
     top: 0;
     width: calc(100% - 271px);
-    z-index: 100;
+    z-index: 600;
     animation-duration: 0.4s;
     animation-timing-function: ease-in-out;
     pointer-events: none;
@@ -510,7 +511,7 @@ button img {
 .kl-layer--selected {
     background: #fff;
     border: 1px solid var(--active-highlight-color);
-    z-index: 1;
+    z-index: 501;
 
     .kl-layer__label {
         color: #000;

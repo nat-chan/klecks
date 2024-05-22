@@ -19,7 +19,7 @@ export class ImportHandler {
     private readonly klRootEl: HTMLElement;
     private readonly klMaxCanvasSize: number;
     private readonly layerManager: LayerManager;
-    private readonly setCurrentLayer: (layer: TKlCanvasLayer) => void;
+    public readonly setCurrentLayer: (layer: TKlCanvasLayer) => void;
     private readonly klCanvas: KlCanvas;
     private readonly klCanvasWorkspace: KlCanvasWorkspace;
     private readonly handUi: HandUi;
@@ -33,7 +33,7 @@ export class ImportHandler {
      * @param filename - string e.g. 'drawing.psd'
      * @param optionStr? - 'default' | 'layer' | 'image'
      */
-    private importFinishedLoading (
+    public importFinishedLoading (
         importedImage: IKlPsd | {
             type: 'image';
             width: number;
@@ -164,6 +164,7 @@ export class ImportHandler {
             this.handUi.update(this.klCanvasWorkspace.getScale(), this.klCanvasWorkspace.getAngleDeg());
         };
 
+        // XXX
         const importAsLayer = (canvas: HTMLCanvasElement | HTMLImageElement) => {
             KL.showImportAsLayerDialog({
                 target: this.klRootEl,

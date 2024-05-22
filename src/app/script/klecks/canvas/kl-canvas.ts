@@ -73,7 +73,7 @@ export class KlCanvas {
     private isDestroyed = false;
     private width: number;
     private height: number;
-    private layerCanvasArr: KlCanvasLayer[];
+    public layerCanvasArr: KlCanvasLayer[];
     private pickCanvas: HTMLCanvasElement; // canvas to draw into for color picker
     private history: KlHistoryInterface;
     private changeListenerArr:  (() => void)[]; // subscribers get notified when opacity changes
@@ -87,7 +87,7 @@ export class KlCanvas {
         this.height = h;
     }
 
-    private emitChange (): void {
+    public emitChange (): void {
         // some changes don't get captured by the history - e.g. changing opacity as the user drags the slider
         this.changeListenerArr.forEach(item => item());
     }

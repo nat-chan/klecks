@@ -11,6 +11,7 @@ import {
     TExportType,
     TKlCanvasLayer,
     TUiLayout,
+    TMixMode,
 } from '../klecks/kl-types';
 import {importFilters} from '../klecks/filters/filters-lazy';
 import {base64ToBlob} from '../klecks/storage/base-64-to-blob';
@@ -49,6 +50,7 @@ import {ERASE_COLOR} from '../klecks/brushes/erase-color';
 import {throwIfNull} from '../bb/base/base';
 import {klConfig} from '../klecks/kl-config';
 import {TRenderTextParam} from '../klecks/image-operations/render-text';
+import {TMiscImportImageHistoryEntry} from '../klecks/history/kl-history';
 
 type KlAppOptionsEmbed = {
     url: string;
@@ -93,6 +95,7 @@ export class KlApp {
     private readonly layerManager: LayerManager;
     private readonly toolspaceScroller: ToolspaceScroller;
     private readonly bottomBarWrapper: HTMLElement;
+    public readonly importHandler: ImportHandler;
 
     private updateCollapse (): void {
 
@@ -1285,7 +1288,7 @@ export class KlApp {
             (type) => {
                 exportType = type;
             },
-            (files, optionsStr) => importHandler.handleFileSelect(files, optionsStr),
+            (files, optionsStr) => this.importHandler.handleFileSelect(files, optionsStr),
             () => this.saveToComputer.save(),
             showNewImageDialog,
             shareImage,
@@ -1561,7 +1564,7 @@ export class KlApp {
         this.resize(this.uiWidth, this.uiHeight);
         this.updateUi();
 
-        const importHandler = new ImportHandler({
+        this.importHandler = new ImportHandler({
             klRootEl: this.klRootEl,
             klMaxCanvasSize,
             layerManager: this.layerManager,
@@ -1580,7 +1583,7 @@ export class KlApp {
                     if (KL.dialogCounter.get() > 0) {
                         return;
                     }
-                    importHandler.handleFileSelect(files, optionStr);
+                    this.importHandler.handleFileSelect(files, optionStr);
                 },
                 enabledTest: () => {
                     return KL.dialogCounter.get() === 0;
@@ -1589,7 +1592,7 @@ export class KlApp {
 
             window.document.addEventListener(
                 'paste',
-                (e: ClipboardEvent) => importHandler.onPaste(e),
+                (e: ClipboardEvent) => this.importHandler.onPaste(e),
                 false
             );
         }
@@ -1699,5 +1702,41 @@ export class KlApp {
 
     isDrawing (): boolean {
         return this.lineSanitizer.getIsDrawing() || this.klCanvasWorkspace.getIsDrawing();
+    }
+
+    injectLayer (base64png: string, name: string, mixModeStr: string, opacity: number, isVisible: string): void {
+
+        klHistory.pause(true);
+        let i = 0;
+        for(; i < this.klCanvas.layerCanvasArr.length; i++){
+            if(this.klCanvas.layerCanvasArr[i].name === name){
+                break;
+            }
+        }
+        if(i === this.klCanvas.layerCanvasArr.length){
+            this.klCanvas.addLayer();
+            this.klCanvas.layerCanvasArr[i].name = name;
+            this.klCanvas.layerCanvasArr[i].isVisible = isVisible === "true";
+            this.klCanvas.layerCanvasArr[i].mixModeStr = mixModeStr as TMixMode;
+            this.klCanvas.layerCanvasArr[i].opacity = opacity;
+        }
+        const img = new Image();
+        img.onload = () => {
+            const ctx = BB.ctx(this.klCanvas.layerCanvasArr[i]);
+            ctx.clearRect(0, 0, this.klCanvas.getWidth(), this.klCanvas.getHeight());
+            ctx.drawImage(img, 0, 0);
+        };
+        img.src = base64png;
+        this.layerManager.update();
+        klHistory.pause(false);
+
+        // XXX import imageを参考にklHistoryをいじっているが、ゆがみを参考にしたほうがいい
+
+//        this.klCanvas.emitChange();
+        klHistory.push({
+            tool: ['misc'],
+            action: 'importImage',
+            params: [BB.copyCanvas(this.klCanvas.layerCanvasArr[i]), payload.name],
+        } as TMiscImportImageHistoryEntry);
     }
 }

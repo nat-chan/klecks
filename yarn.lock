@@ -1647,6 +1647,11 @@ hasown@^2.0.0:
   dependencies:
     function-bind "^1.1.2"
 
+html-beautify@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/html-beautify/-/html-beautify-1.0.4.tgz#09b2cf5806fa0dbd7e3dbe649d6598316d4794e0"
+  integrity sha512-IssqMH0VBjJCWjsXi6Q33/Yup0+4q9lmge+mdw3+KtaT9Vyg0m+pHYP3VyZq0BFt3rLMjiTIUUiCkKeoZ2Yosw==
+
 htmlnano@^2.0.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/htmlnano/-/htmlnano-2.1.1.tgz#9ba84e145cd8b7cd4c783d9ab8ff46a80e79b59b"

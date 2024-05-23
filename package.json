@@ -24,6 +24,7 @@
     "@parcel/transformer-sass": "^2.9.3",
     "ag-psd": "^17.0.0",
     "buffer": "^6.0.3",
+    "html-beautify": "^1.0.4",
     "js-beautify": "^1.14.8",
     "json5": "^2.2.3",
     "mdn-polyfills": "^5.20.0",

@@ -1705,38 +1705,7 @@ export class KlApp {
     }
 
     injectLayer (base64png: string, name: string, mixModeStr: string, opacity: number, isVisible: string): void {
-
-        klHistory.pause(true);
-        let i = 0;
-        for(; i < this.klCanvas.layerCanvasArr.length; i++){
-            if(this.klCanvas.layerCanvasArr[i].name === name){
-                break;
-            }
-        }
-        if(i === this.klCanvas.layerCanvasArr.length){
-            this.klCanvas.addLayer();
-            this.klCanvas.layerCanvasArr[i].name = name;
-            this.klCanvas.layerCanvasArr[i].isVisible = isVisible === "true";
-            this.klCanvas.layerCanvasArr[i].mixModeStr = mixModeStr as TMixMode;
-            this.klCanvas.layerCanvasArr[i].opacity = opacity;
-        }
-        const img = new Image();
-        img.onload = () => {
-            const ctx = BB.ctx(this.klCanvas.layerCanvasArr[i]);
-            ctx.clearRect(0, 0, this.klCanvas.getWidth(), this.klCanvas.getHeight());
-            ctx.drawImage(img, 0, 0);
-        };
-        img.src = base64png;
+        this.klCanvas.injectLayer(base64png, name, mixModeStr, opacity, isVisible);
         this.layerManager.update();
-        klHistory.pause(false);
-
-        // XXX import imageを参考にklHistoryをいじっているが、ゆがみを参考にしたほうがいい
-
-//        this.klCanvas.emitChange();
-        klHistory.push({
-            tool: ['misc'],
-            action: 'importImage',
-            params: [BB.copyCanvas(this.klCanvas.layerCanvasArr[i]), payload.name],
-        } as TMiscImportImageHistoryEntry);
     }
 }

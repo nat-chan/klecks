@@ -8,6 +8,7 @@ import {drawProject} from './draw-project';
 import {LANG} from '../../language/language';
 import {drawGradient} from '../image-operations/gradient-tool';
 import {nullToUndefined} from '../../bb/base/base';
+import {TMiscImportImageHistoryEntry} from '../history/kl-history';
 
 
 // TODO remove in 2026
@@ -1064,4 +1065,37 @@ export class KlCanvas {
         this.isDestroyed = true;
     }
 
+    injectLayer (
+        base64png: string,
+        name: string,
+        mixModeStr: string,
+        opacity: number,
+        isVisible: string
+    ): void {
+        let i = 0;
+        for(; i < this.layerCanvasArr.length; i++){
+            if(this.layerCanvasArr[i].name === name){
+                break;
+            }
+        }
+        if(i === this.layerCanvasArr.length){
+            this.addLayer()
+            this.layerCanvasArr[i].name = name;
+            this.layerCanvasArr[i].isVisible = isVisible === "true";
+            this.layerCanvasArr[i].mixModeStr = mixModeStr as TMixMode;
+            this.layerCanvasArr[i].opacity = opacity;
+        }
+        const img = new Image();
+        img.onload = () => {
+            const ctx = BB.ctx(this.layerCanvasArr[i]);
+            ctx.clearRect(0, 0, this.width, this.height);
+            ctx.drawImage(img, 0, 0);
+        };
+        img.src = base64png;
+        this.history.push({
+            tool: ['misc'],
+            action: 'importImage',
+            params: [BB.copyCanvas(this.layerCanvasArr[i]), name],
+        } as TMiscImportImageHistoryEntry);
+    }
 }
